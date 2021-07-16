@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Otomanopee+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/dashboard.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.4.1/chart.js" integrity="sha512-lUsN5TEogpe12qeV8NF4cxlJJatTZ12jnx9WXkFXOy7yFbuHwYRTjmctvwbRIuZPhv+lpvy7Cm9o8T9e+9pTrg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <title>TNPSC TRACKER PROJECT</title>
+</head>
+<body>
+   <nav class="navbar">
+        <div class="brand-title">Super 30</div>
+        <a href="#" class="toggle-button">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </a>
+        <div class="navbar-links">
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/leaderboard">Leaderboard</a></li>
+            <li><a href="/login">Login</a></li>
+          </ul>
+        </div>
+      </nav>
+      <div>
+            <img class="user-profile" src="./images/user2.png" alt="user profile picture">
+            <div class="user-profile">
+                <%= user%>
+            </div>
+    </div>
+     <form action="/logout" method="POST">
+        <button type="submit" class="logout">Logout</button>
+    </form>
+    <div class="user-stats">
+                 <div class="user-stats-items">
+                    <h3>Total Score</h3>
+                    <p><%=total%></p>
+                </div> 
+                 <div class="user-stats-items">
+                   <h3>Number of Tests Attended</h3>
+                   <p><%=tests%></p>
+                </div> 
+    </div>
+        <h3 class="heading">Analytics</h3>
+         <div class="first-row">
+        <div class="firstchart">
+                 <canvas 
+             id="myChart1"></canvas>
+             </div> 
+            
+        <div class="secondchart">
+                <canvas 
+             id="myChart2"></canvas>
+        </div>
+      </div>
+    <script>
+       let array = "<%=value%>";
+       console.log(array);
+       let accuracy = "<%=accuracy%>";
+       let date = "<%= date%>";
+        var ctx = document.getElementById('myChart1').getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+        labels: ["Correct answer%","Wrong answer%"],
+        datasets: [{
+            label: 'Marks',
+            data: accuracy.split(","),
+            backgroundColor: [
+               '#FF449F',
+                '#FFD523'
+            ]
+        }]
+    },
+    options: {
+        responsive: true
+    }
+});
+
+ var ctx2 = document.getElementById('myChart2').getContext('2d');
+var myChart = new Chart(ctx2, {
+    type: 'line',
+    data: {
+        labels: date.split(","),
+        datasets: [{
+            label: 'Marks',
+            data: array.split(","),
+            backgroundColor: 'green',
+            borderColor: 'green'
+        }]
+    },
+    options: {
+        responsive:true,
+        scales: {
+            y: {
+                beginAtZero: true,
+                max: 100
+                }
+            }
+    }
+});
+    </script>
+         <h3 class="heading">Test Details</h3>
+    <div class="add-test">
+        <form id="marks-form" class="add-test-form" action="/mypage" method="POST" onsubmit="clear()">
+        <label for="date">Test Date</label>
+        <input type="date" name="date" min="2021-07-01" max="<%=current_date%>">
+        <label for="total_marks">Total Marks</label>
+        <input type="number" name="total_marks">
+        <label for="number">Marks Obained</label>
+        <input type="number" name="mark">
+        <button class="add-test-button">Add Test</button>
+    </form>
+    </div>
+<script type="text/javascript">
+    const toggleButton = document.getElementsByClassName('toggle-button')[0]
+const navbarLinks = document.getElementsByClassName('navbar-links')[0]
+
+toggleButton.addEventListener('click', () => {
+  navbarLinks.classList.toggle('active')
+})
+
+
+</script>
+</body>
+</html>
